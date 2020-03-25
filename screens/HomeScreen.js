@@ -13,6 +13,8 @@ import {
 
 import { MonoText } from "../components/StyledText";
 
+//imp
+//hh
 import { Camera } from "expo-camera";
 //import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
@@ -49,6 +51,7 @@ export default function HomeScreen() {
       [{ resize: { height: 300, width: 300 } }],
       { base64: true }
     );
+    //console.log("hi")
     return manipulatedImage.base64;
   };
 

@@ -34,12 +34,15 @@ const resize = async uri => {
 };
 
 const predict = async base64 => {
-  const response = await app.models.predict(Clarifai.GENERAL_MODEL, { base64 });
+  const response = await app.models.predict(
+    { id: "qatari riyal", version: "3e2ac84b004942b9a764162575227f28" },
+    { base64 }
+  );
   console.log("predict result", response);
   return response;
 };
 
-export default function SettingsScreen(props) {
+export default function CurrencyScreen(props) {
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
