@@ -49,6 +49,7 @@ export default function HomeScreen() {
       [{ resize: { height: 300, width: 300 } }],
       { base64: true }
     );
+    console.log("hi")
     return manipulatedImage.base64;
   };
 
