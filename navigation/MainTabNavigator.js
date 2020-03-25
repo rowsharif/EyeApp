@@ -9,6 +9,8 @@ import LinksScreen from "../screens/LinksScreen";
 import BarCodeScreen from "../screens/BarCodeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CurrencyScreen from "../screens/CurrencyScreen";
+import StepScreen from "../screens/StepScreen";
+
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -37,6 +39,29 @@ HomeStack.navigationOptions = {
 };
 
 HomeStack.path = "";
+
+const StepStack = createStackNavigator(
+  {
+    Step: StepScreen
+  },
+  config
+);
+
+StepStack.navigationOptions = {
+  tabBarLabel: "Steps",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  )
+};
+
+StepStack.path = "";
 
 const CurrencyStack = createStackNavigator(
   {
@@ -123,7 +148,8 @@ const tabNavigator = createBottomTabNavigator({
   LinksStack,
   BarCodeStack,
   SettingsStack,
-  CurrencyStack
+  CurrencyStack,
+  StepStack
 });
 
 tabNavigator.path = "";
