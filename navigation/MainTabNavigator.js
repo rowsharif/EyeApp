@@ -9,6 +9,7 @@ import LinksScreen from "../screens/LinksScreen";
 import BarCodeScreen from "../screens/BarCodeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CurrencyScreen from "../screens/CurrencyScreen";
+import ColorScreen from "../screens/ColorScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -36,7 +37,30 @@ HomeStack.navigationOptions = {
   )
 };
 
-HomeStack.path = "";
+ColorStack.path = "";
+
+const ColorStack = createStackNavigator(
+  {
+    Color: ColorScreen
+  },
+  config
+);
+
+ColorStack.navigationOptions = {
+  tabBarLabel: "Color",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  )
+};
+
+ColorStack.path = "";
 
 const CurrencyStack = createStackNavigator(
   {
@@ -123,7 +147,8 @@ const tabNavigator = createBottomTabNavigator({
   LinksStack,
   BarCodeStack,
   SettingsStack,
-  CurrencyStack
+  CurrencyStack,
+  ColorStack
 });
 
 tabNavigator.path = "";
