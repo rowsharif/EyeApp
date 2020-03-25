@@ -11,6 +11,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import CurrencyScreen from "../screens/CurrencyScreen";
 import StepScreen from "../screens/StepScreen";
 
+import ColorScreen from "../screens/ColorScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -45,11 +46,10 @@ const StepStack = createStackNavigator(
     Step: StepScreen
   },
   config
-);
-
+  );
 StepStack.navigationOptions = {
   tabBarLabel: "Steps",
-  tabBarIcon: ({ focused }) => (
+    tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -60,8 +60,33 @@ StepStack.navigationOptions = {
     />
   )
 };
-
 StepStack.path = "";
+
+
+const ColorStack = createStackNavigator(
+  {
+    Color: ColorScreen
+  },
+  config
+  );
+  ColorStack.navigationOptions = {
+  tabBarLabel: "Color",
+    tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  )
+};
+ColorStack.path = "";
+
+
+
+ColorStack.path = "";
 
 const CurrencyStack = createStackNavigator(
   {
@@ -149,7 +174,8 @@ const tabNavigator = createBottomTabNavigator({
   BarCodeStack,
   SettingsStack,
   CurrencyStack,
-  StepStack
+  StepStack,
+  ColorStack
 });
 
 tabNavigator.path = "";
