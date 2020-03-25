@@ -34,16 +34,16 @@ const resize = async uri => {
 };
 
 const predict = async base64 => {
-  const response = await app.models.predict({ id: "qatari riyal" }, { base64 });
+  const response = await app.models.predict(
+    { id: "qatari riyal", version: "f04dcd72551d432b9c2e40f7ed333501" },
+    { base64 }
+  );
   console.log("predict result", response);
   return response;
 };
 
 export default function CurrencyScreen(props) {
-  const [predictions, setPredictions] = useState([
-    { name: "hi" },
-    { name: "hi" }
-  ]);
+  const [predictions, setPredictions] = useState([{ name: "hi" }]);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const askPermission = async () => {
