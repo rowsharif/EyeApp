@@ -8,7 +8,6 @@ import HomeScreen from "../screens/HomeScreen";
 import LinksScreen from "../screens/LinksScreen";
 import BarCodeScreen from "../screens/BarCodeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import CurrencyScreen from "../screens/CurrencyScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -37,29 +36,6 @@ HomeStack.navigationOptions = {
 };
 
 HomeStack.path = "";
-
-const CurrencyStack = createStackNavigator(
-  {
-    Currency: CurrencyScreen
-  },
-  config
-);
-
-CurrencyStack.navigationOptions = {
-  tabBarLabel: "Currency",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
-  )
-};
-
-CurrencyStack.path = "";
 
 const LinksStack = createStackNavigator(
   {
@@ -122,8 +98,7 @@ const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   BarCodeStack,
-  SettingsStack,
-  CurrencyStack
+  SettingsStack
 });
 
 tabNavigator.path = "";

@@ -1,7 +1,6 @@
-import { ScrollView, StyleSheet } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, StyleSheet, Button } from "react-native";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 export default function BarCodeScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -16,20 +15,21 @@ export default function BarCodeScreen() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     const response = await fetch(
-      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=22j05mzltfwjeijxedkeozr45ngee6`
+      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=r7w70x27axuy3iveqikreebx0061ww`
     );
     const json = await response.json();
-
+    console.log("json", json);
     alert(`Product is ${json.products[0].product_name}`);
   };
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
+
   if (hasPermission === false) {
-    return <Text>No access to Camera</Text>;
+    return <Text>No access to camera</Text>;
   }
 
   return (
