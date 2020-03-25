@@ -37,7 +37,7 @@ HomeStack.navigationOptions = {
   )
 };
 
-ColorStack.path = "";
+HomeStack.path = "";
 
 const ColorStack = createStackNavigator(
   {

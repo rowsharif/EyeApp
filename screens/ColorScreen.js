@@ -35,7 +35,7 @@ const resize = async uri => {
 
 const predict = async base64 => {
   const response = await app.models.predict(
-    { id: "qatari riyal", version: "3e2ac84b004942b9a764162575227f28" },
+    "eeed0b6733a644cea07cf4c60f87ebb7",
     { base64 }
   );
   console.log("predict result", response);
@@ -71,7 +71,7 @@ export default function ColorScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.concepts);
+    setPredictions(predictions.outputs[0].data.colors);
     console.log("predictions");
     console.log(predictions);
   };
