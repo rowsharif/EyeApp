@@ -44,7 +44,7 @@ const predict = async base64 => {
   return response;
 };
 
-export default function SettingsScreen(props) {
+export default function Speech(props) {
   
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
 
