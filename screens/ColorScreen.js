@@ -44,7 +44,7 @@ const predict = async base64 => {
 };
 
 export default function ColorScreen(props) {
-  const [predictions, setPredictions] = useState([{ w3c: { name: "hi" } }]);
+  const [predictions, setPredictions] = useState([{ w3c: { name: "Please Capture to Identify Color" } }]);
   const [loaded, setLoaded] = useState(true);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
