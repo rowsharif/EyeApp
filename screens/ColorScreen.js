@@ -43,7 +43,7 @@ const predict = async base64 => {
 };
 
 export default function ColorScreen(props) {
-  const [predictions, setPredictions] = useState([{ name: "hi" }]);
+  const [predictions, setPredictions] = useState([{ w3c: { name: "hi" } }]);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const askPermission = async () => {
@@ -118,7 +118,7 @@ export default function ColorScreen(props) {
             onPress={check}
           >
             <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              {predictions[0].name}
+              {predictions[0].w3c.name}
             </Text>
           </TouchableOpacity>
         </View>
