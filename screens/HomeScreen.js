@@ -10,7 +10,7 @@ import {
   View,
   CameraRoll
 } from "react-native";
-
+import { NavigationEvents } from "react-navigation";
 import { MonoText } from "../components/StyledText";
 
 //imp
@@ -30,6 +30,7 @@ import Auth from "../auth";
 
 export default function HomeScreen() {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const [loaded, setLoaded] = useState(true);
 
   const askPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -77,54 +78,60 @@ export default function HomeScreen() {
     // const response2 = await app.inputs.delete();
     // console.log("deleted inputs", response2);
 
-    Auth.setAllowedIn(false)
+    Auth.setAllowedIn(false);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Camera
-        ref={ref => {
-          this.camera = ref;
-        }}
-        style={{ flex: 1 }}
-        type={Camera.Constants.Type.front}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "transparent",
-            flexDirection: "column",
-            justifyContent: "flex-end"
+      <NavigationEvents
+        onWillFocus={payload => setLoaded(true)}
+        onDidBlur={payload => setLoaded(false)}
+      />
+      {loaded && (
+        <Camera
+          ref={ref => {
+            this.camera = ref;
           }}
+          style={{ flex: 1 }}
+          type={Camera.Constants.Type.back}
         >
-          <TouchableOpacity
+          <View
             style={{
-              flex: 0.1,
-              alignItems: "center",
-              backgroundColor: "black",
-              height: "10%"
+              flex: 1,
+              backgroundColor: "transparent",
+              flexDirection: "column",
+              justifyContent: "flex-end"
             }}
-            onPress={objectDetection}
           >
-            <Text style={{ fontSize: 30, color: "white", padding: 15 }}>
-              Capture Image
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignItems: "center",
-              backgroundColor: "black",
-              height: "10%"
-            }}
-            onPress={handleDeleteThings}
-          >
-            <Text style={{ fontSize: 30, color: "white", padding: 15 }}>
-              Sign Out
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+            <TouchableOpacity
+              style={{
+                flex: 0.1,
+                alignItems: "center",
+                backgroundColor: "black",
+                height: "10%"
+              }}
+              onPress={objectDetection}
+            >
+              <Text style={{ fontSize: 30, color: "white", padding: 15 }}>
+                Capture Image
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flex: 0.1,
+                alignItems: "center",
+                backgroundColor: "black",
+                height: "10%"
+              }}
+              onPress={handleDeleteThings}
+            >
+              <Text style={{ fontSize: 30, color: "white", padding: 15 }}>
+                Sign Out
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      )}
     </View>
   );
 }

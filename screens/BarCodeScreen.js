@@ -15,13 +15,16 @@ export default function BarCodeScreen() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     const response = await fetch(
-      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=r7w70x27axuy3iveqikreebx0061ww`
+      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=kwm395rj9cfv7hxnvszaoal4mh08mj`
     );
     const json = await response.json();
     console.log("json", json);
     alert(`Product is ${json.products[0].product_name}`);
+    // alert(`Product is ${json.products[0].product_name}
+    // description is ${json.products[0].description}
+    // color is ${json.products[0].color}`);
   };
 
   if (hasPermission === null) {

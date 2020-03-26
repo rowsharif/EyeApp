@@ -46,10 +46,10 @@ const StepStack = createStackNavigator(
     Step: StepScreen
   },
   config
-  );
+);
 StepStack.navigationOptions = {
   tabBarLabel: "Steps",
-    tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -62,16 +62,15 @@ StepStack.navigationOptions = {
 };
 StepStack.path = "";
 
-
 const ColorStack = createStackNavigator(
   {
     Color: ColorScreen
   },
   config
-  );
-  ColorStack.navigationOptions = {
+);
+ColorStack.navigationOptions = {
   tabBarLabel: "Color",
-    tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -83,8 +82,6 @@ const ColorStack = createStackNavigator(
   )
 };
 ColorStack.path = "";
-
-
 
 ColorStack.path = "";
 
@@ -170,7 +167,6 @@ SettingsStack.path = "";
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
   BarCodeStack,
   SettingsStack,
   CurrencyStack,

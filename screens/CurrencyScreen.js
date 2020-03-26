@@ -16,6 +16,7 @@ import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
+import { NavigationEvents } from "react-navigation";
 
 import Clarifai from "clarifai";
 
@@ -35,7 +36,7 @@ const resize = async uri => {
 
 const predict = async base64 => {
   const response = await app.models.predict(
-    { id: "qatari riyal", version: "3e2ac84b004942b9a764162575227f28" },
+    { id: "qatari riyal", version: "bf23cf363a1341c5a7013bb0a0acdb32" },
     { base64 }
   );
   console.log("predict result", response);
@@ -44,6 +45,7 @@ const predict = async base64 => {
 
 export default function CurrencyScreen(props) {
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
+  const [loaded, setLoaded] = useState(true);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const askPermission = async () => {
@@ -81,48 +83,54 @@ export default function CurrencyScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Camera
-        ref={ref => {
-          this.camera = ref;
-        }}
-        style={{ flex: 1 }}
-        type={Camera.Constants.Type.back}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "transparent",
-            flexDirection: "row"
+      <NavigationEvents
+        onWillFocus={payload => setLoaded(true)}
+        onDidBlur={payload => setLoaded(false)}
+      />
+      {loaded && (
+        <Camera
+          ref={ref => {
+            this.camera = ref;
           }}
+          style={{ flex: 1 }}
+          type={Camera.Constants.Type.back}
         >
-          <TouchableOpacity
+          <View
             style={{
               flex: 1,
-              alignSelf: "flex-end",
-              alignItems: "center",
-              backgroundColor: "black"
+              backgroundColor: "transparent",
+              flexDirection: "row"
             }}
-            onPress={objectDetection}
           >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              Capture Image
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignSelf: "flex-end",
-              alignItems: "center",
-              backgroundColor: "black"
-            }}
-            onPress={check}
-          >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              {predictions[0].name}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                alignSelf: "flex-end",
+                alignItems: "center",
+                backgroundColor: "black"
+              }}
+              onPress={objectDetection}
+            >
+              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+                Capture Image
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                alignSelf: "flex-end",
+                alignItems: "center",
+                backgroundColor: "black"
+              }}
+              onPress={check}
+            >
+              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+                {predictions[0].name}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      )}
     </View>
   );
 }
