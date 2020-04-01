@@ -8,15 +8,18 @@ import {
   StyleSheet,
   View,
   Text,
+  Button,
   TouchableOpacity
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationEvents } from "react-navigation";
 
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
+
+import * as Speech from 'expo-speech';
+import Constants from 'expo-constants';
 
 import Clarifai from "clarifai";
 
@@ -35,19 +38,22 @@ const resize = async uri => {
 };
 
 const predict = async base64 => {
-  const response = await app.models.predict(
-    "eeed0b6733a644cea07cf4c60f87ebb7",
-    { base64 }
-  );
+  const response = await app.models.predict(Clarifai.GENERAL_MODEL, { base64 });
   console.log("predict result", response);
   return response;
 };
 
-export default function ColorScreen(props) {
-  const [predictions, setPredictions] = useState([{ w3c: { name: "Please Capture to Identify Color" } }]);
-  const [loaded, setLoaded] = useState(true);
+export default function Speech(props) {
+  
+  const [predictions, setPredictions] = useState([{ name: "hi" }]);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
+
+ const speak= () => {
+    var thingToSay = predictions[0].name
+    Speech.speak(thingToSay);
+  }
+
   const askPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     setHasCameraPermission(status === "granted");
@@ -73,7 +79,7 @@ export default function ColorScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.colors);
+    setPredictions(predictions.outputs[0].data.concepts);
     console.log("predictions");
     console.log(predictions);
   };
@@ -83,54 +89,53 @@ export default function ColorScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <NavigationEvents
-        onWillFocus={payload => setLoaded(true)}
-        onDidBlur={payload => setLoaded(false)}
-      />
-      {loaded && (
-        <Camera
-          ref={ref => {
-            this.camera = ref;
+      <Camera
+        ref={ref => {
+          this.camera = ref;
+        }}
+        style={{ flex: 1 }}
+        type={Camera.Constants.Type.back}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "transparent",
+            flexDirection: "row"
           }}
-          style={{ flex: 1 }}
-          type={Camera.Constants.Type.back}
         >
-          <View
+          <TouchableOpacity
             style={{
               flex: 1,
-              backgroundColor: "transparent",
-              flexDirection: "row"
+              alignSelf: "flex-end",
+              alignItems: "center",
+              backgroundColor: "black"
             }}
+            onPress={objectDetection}
           >
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                backgroundColor: "black"
-              }}
-              onPress={objectDetection}
-            >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                Capture Image
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                backgroundColor: "black"
-              }}
-              onPress={check}
-            >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {predictions[0].w3c.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      )}
+            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              Capture Image
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              alignSelf: "flex-end",
+              alignItems: "center",
+              backgroundColor: "black"
+            }}
+            onPress={check}
+          >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              {predictions[0].name}
+            </Text>
+            {/* <View style={styles.container}> */}
+            
+        <Button title="Press to hear " onPress={speak} />
+      {/* </View> */}
+
+          </TouchableOpacity>
+        </View>
+      </Camera>
     </View>
   );
 }
@@ -166,3 +171,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   }
 });
+
