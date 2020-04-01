@@ -36,7 +36,7 @@ const resize = async uri => {
 
 const predict = async base64 => {
   const response = await app.models.predict(
-    { id: "qatari riyal", version: "32fb60cc716d4afaa15ee1802a04ed53" },
+    { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
     { base64 }
   );
   console.log("predict result", response);
