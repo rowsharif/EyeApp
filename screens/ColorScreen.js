@@ -2,6 +2,8 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import React, { useState, useEffect } from "react";
+import * as Speech from 'expo-speech';
+
 import {
   Platform,
   StatusBar,
@@ -54,6 +56,8 @@ export default function ColorScreen(props) {
   };
 
   useEffect(() => {
+    Speech.speak("Color screen")
+
     askPermission();
   }, []);
   useEffect(() => {
@@ -126,6 +130,8 @@ export default function ColorScreen(props) {
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {predictions[0].w3c.name}
+                {Speech.speak(predictions[0].w3c.name)}
+
               </Text>
             </TouchableOpacity>
           </View>

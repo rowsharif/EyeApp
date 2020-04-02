@@ -2776,6 +2776,11 @@ expo-sensors@~8.0.0:
   dependencies:
     invariant "^2.2.4"
 
+expo-speech@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/expo-speech/-/expo-speech-8.1.0.tgz#b415d0a15eb626ae9cf8dfac56130b84da64e801"
+  integrity sha512-YS5I2SWOfR/7ymD+IRu2PRLpoALifce5goRFf2KBrzZg3L9csyPpMEH/+qrtORGdIeoHTkf8Bm05mOwSprP97w==
+
 expo-sqlite@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-8.0.0.tgz#293b45c78d612ab25400c8c579bd7d73f06ccb6f"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import * as Speech from 'expo-speech';
 
 export default function BarCodeScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -9,6 +10,8 @@ export default function BarCodeScreen() {
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
+      Speech.speak("BarCode screen")
+
       setHasPermission(status === "granted");
     })();
   }, []);
@@ -20,6 +23,7 @@ export default function BarCodeScreen() {
       `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=kwm395rj9cfv7hxnvszaoal4mh08mj`
     );
     const json = await response.json();
+    Speech.speak(json.products[0].product_name);
     console.log("json", json);
     alert(`Product is ${json.products[0].product_name}`);
     // alert(`Product is ${json.products[0].product_name}

@@ -1,6 +1,8 @@
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
+import * as Speech from 'expo-speech';
+
 import React, { useState, useEffect } from "react";
 import {
   Platform,
@@ -51,6 +53,8 @@ export default function SettingsScreen(props) {
   };
 
   useEffect(() => {
+    Speech.speak("Surrounding screen")
+
     askPermission();
   }, []);
   useEffect(() => {
@@ -123,6 +127,8 @@ export default function SettingsScreen(props) {
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {predictions[0].name}
+                {Speech.speak(predictions[0].name)}
+
               </Text>
             </TouchableOpacity>
           </View>

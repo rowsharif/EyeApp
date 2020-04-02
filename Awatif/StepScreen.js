@@ -15,7 +15,9 @@ export default function StepScreen() {
             Pedometer.isAvailableAsync().then(
             result => {
                 setisPedometerAvailable(String(result))
-            },
+                Speech.speak(setisPedometerAvailable(String(result)))
+
+             },
             error => {
                 setisPedometerAvailable("Could not get isPedometerAvailable: " + error)
                 }

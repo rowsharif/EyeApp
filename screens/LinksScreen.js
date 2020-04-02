@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Asset } from "expo-asset";
 import { AR } from "expo";
+import * as Speech from 'expo-speech';
+
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { THREE } from "expo-three";
 import * as ThreeAR from "expo-three-ar";

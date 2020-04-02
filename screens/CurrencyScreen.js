@@ -17,6 +17,7 @@ import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
+import * as Speech from 'expo-speech';
 
 import Clarifai from "clarifai";
 
@@ -54,6 +55,8 @@ export default function CurrencyScreen(props) {
   };
 
   useEffect(() => {
+    Speech.speak("Currency screen")
+
     askPermission();
   }, []);
   useEffect(() => {
@@ -74,6 +77,7 @@ export default function CurrencyScreen(props) {
     const resized = await resize(photo);
     const predictions = await predict(resized);
     setPredictions(predictions.outputs[0].data.concepts);
+    
     console.log("predictions");
     console.log(predictions);
   };
@@ -126,6 +130,7 @@ export default function CurrencyScreen(props) {
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {predictions[0].name}
+                {Speech.speak("This is ".concat(predictions[0].name))}
               </Text>
             </TouchableOpacity>
           </View>

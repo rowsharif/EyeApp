@@ -1,5 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import React, { useState, useEffect } from "react";
+import * as Speech from 'expo-speech';
+
 import {
   Image,
   Platform,
@@ -38,6 +40,8 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    Speech.speak("Home screen")
+
     askPermission();
   }, []);
 
