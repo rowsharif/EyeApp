@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { Pedometer } from "expo-sensors";
 import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
+import * as Speech from 'expo-speech';
 
 export default function StepScreen() {
     const [isPedometerAvailable,setisPedometerAvailable]=useState("checking");
@@ -15,9 +16,7 @@ export default function StepScreen() {
             Pedometer.isAvailableAsync().then(
             result => {
                 setisPedometerAvailable(String(result))
-                Speech.speak(setisPedometerAvailable(String(result)))
-
-             },
+            },
             error => {
                 setisPedometerAvailable("Could not get isPedometerAvailable: " + error)
                 }
@@ -28,6 +27,8 @@ export default function StepScreen() {
             Pedometer.getStepCountAsync(start, end).then(
             result => {
                 setpastStepCount(result.steps )
+                Speech.speak(result.steps)
+
             },
             error => {
                 setpastStepCount("Could not get stepCount: " + error)
@@ -40,6 +41,8 @@ export default function StepScreen() {
     _subscription = null;
   }; 
   useEffect(() => {
+    Speech.speak("Step screen.")
+
             _subscribe();
   },[])
 
@@ -57,12 +60,15 @@ export default function StepScreen() {
       <View style={styles.container}>
         <Text>
           Steps taken in the last 24 hours: {pastStepCount}
+
         </Text>
           <TouchableOpacity
         style={styles.button}
        
       >
-        <Text>Steps you have taken: {currentStepCount}</Text>
+        <Text>Steps you have taken: {currentStepCount}
+        {Speech.speak("Steps you have taken:".concat(currentStepCount.toString()))}
+</Text>
       </TouchableOpacity>       
       <TouchableOpacity
         style={styles.button}
