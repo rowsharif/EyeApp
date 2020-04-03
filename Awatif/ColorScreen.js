@@ -2,6 +2,8 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import React, { useState, useEffect } from "react";
+import * as Speech from 'expo-speech';
+
 import {
   Platform,
   StatusBar,
@@ -11,13 +13,12 @@ import {
   TouchableOpacity
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationEvents } from "react-navigation";
 
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
-import { NavigationEvents } from "react-navigation";
-import * as Speech from 'expo-speech';
 
 import Clarifai from "clarifai";
 
@@ -37,15 +38,15 @@ const resize = async uri => {
 
 const predict = async base64 => {
   const response = await app.models.predict(
-    { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
+    "eeed0b6733a644cea07cf4c60f87ebb7",
     { base64 }
   );
   console.log("predict result", response);
   return response;
 };
 
-export default function CurrencyScreen(props) {
-  const [predictions, setPredictions] = useState([{ name: "hi" }]);
+export default function ColorScreen(props) {
+  const [predictions, setPredictions] = useState([{ w3c: { name: "Please Capture to Identify Color" } }]);
   const [loaded, setLoaded] = useState(true);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -55,7 +56,7 @@ export default function CurrencyScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Currency screen")
+    Speech.speak("Color screen")
 
     askPermission();
   }, []);
@@ -76,8 +77,7 @@ export default function CurrencyScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.concepts);
-    
+    setPredictions(predictions.outputs[0].data.colors);
     console.log("predictions");
     console.log(predictions);
   };
@@ -129,8 +129,9 @@ export default function CurrencyScreen(props) {
               onPress={check}
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {predictions[0].name}
-                {Speech.speak("This is ".concat(predictions[0].name))}
+                {predictions[0].w3c.name}
+                {Speech.speak(predictions[0].w3c.name)}
+
               </Text>
             </TouchableOpacity>
           </View>

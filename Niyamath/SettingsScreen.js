@@ -1,6 +1,8 @@
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
+import * as Speech from 'expo-speech';
+
 import React, { useState, useEffect } from "react";
 import {
   Platform,
@@ -11,18 +13,17 @@ import {
   TouchableOpacity
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationEvents } from "react-navigation";
 
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
-import { NavigationEvents } from "react-navigation";
-import * as Speech from 'expo-speech';
 
 import Clarifai from "clarifai";
 
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda"
+  apiKey: "14ed2164e0c04fb3946ea51b5748aa53"
 });
 process.nextTick = setImmediate;
 
@@ -36,15 +37,12 @@ const resize = async uri => {
 };
 
 const predict = async base64 => {
-  const response = await app.models.predict(
-    { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
-    { base64 }
-  );
+  const response = await app.models.predict(Clarifai.GENERAL_MODEL, { base64 });
   console.log("predict result", response);
   return response;
 };
 
-export default function CurrencyScreen(props) {
+export default function SettingsScreen(props) {
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
   const [loaded, setLoaded] = useState(true);
 
@@ -55,7 +53,7 @@ export default function CurrencyScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Currency screen")
+    Speech.speak("Surrounding screen")
 
     askPermission();
   }, []);
@@ -77,7 +75,6 @@ export default function CurrencyScreen(props) {
     const resized = await resize(photo);
     const predictions = await predict(resized);
     setPredictions(predictions.outputs[0].data.concepts);
-    
     console.log("predictions");
     console.log(predictions);
   };
@@ -130,7 +127,8 @@ export default function CurrencyScreen(props) {
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {predictions[0].name}
-                {Speech.speak("This is ".concat(predictions[0].name))}
+                {Speech.speak(predictions[0].name)}
+
               </Text>
             </TouchableOpacity>
           </View>
