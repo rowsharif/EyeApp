@@ -54,6 +54,7 @@ export default function DemographicsScreen(props) {
   };
 
   useEffect(() => {
+    Speech.speak("Demographics screen");
     askPermission();
   }, []);
   useEffect(() => {
@@ -131,6 +132,7 @@ export default function DemographicsScreen(props) {
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
                   {prediction.name}
+                  {Speech.speak(prediction.name)}
                 </Text>
               ))}
             </TouchableOpacity>

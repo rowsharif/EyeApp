@@ -54,6 +54,7 @@ export default function FoodScreen(props) {
   };
 
   useEffect(() => {
+    Speech.speak("Food screen");
     askPermission();
   }, []);
   useEffect(() => {
@@ -129,6 +130,7 @@ export default function FoodScreen(props) {
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
                   {prediction.name}
+                  {Speech.speak(prediction.name)}
                 </Text>
               ))}
             </TouchableOpacity>
