@@ -121,9 +121,13 @@ export default function SettingsScreen(props) {
               }}
               onPress={check}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {predictions[0].name}
-              </Text>
+              {predictions.map(prediction => (
+                <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: "white" }}
+                >
+                  {prediction.name}
+                </Text>
+              ))}
             </TouchableOpacity>
           </View>
         </Camera>

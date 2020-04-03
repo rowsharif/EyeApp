@@ -11,12 +11,12 @@ import {
   TouchableOpacity
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationEvents } from "react-navigation";
 
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
+import { NavigationEvents } from "react-navigation";
 
 import Clarifai from "clarifai";
 
@@ -36,17 +36,15 @@ const resize = async uri => {
 
 const predict = async base64 => {
   const response = await app.models.predict(
-    "eeed0b6733a644cea07cf4c60f87ebb7",
+    { id: "qatari riyal", version: "c0c0ac362b03416da06ab3fa36fb58e3" },
     { base64 }
   );
   console.log("predict result", response);
   return response;
 };
 
-export default function ColorScreen(props) {
-  const [predictions, setPredictions] = useState([
-    { w3c: { name: "Please Capture to Identify Color" } }
-  ]);
+export default function DemographicsScreen(props) {
+  const [predictions, setPredictions] = useState([{ name: "hi" }]);
   const [loaded, setLoaded] = useState(true);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -75,7 +73,9 @@ export default function ColorScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.colors);
+    setPredictions(
+      predictions.outputs[0].data.face.multicultural_appearance.concepts
+    );
     console.log("predictions");
     console.log(predictions);
   };
@@ -130,7 +130,7 @@ export default function ColorScreen(props) {
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
-                  {prediction.w3c.name}
+                  {prediction.name}
                 </Text>
               ))}
             </TouchableOpacity>
