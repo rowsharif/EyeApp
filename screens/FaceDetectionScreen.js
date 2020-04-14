@@ -18,7 +18,6 @@ import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
-
 import Clarifai from "clarifai";
 
 const app = new Clarifai.App({
@@ -37,25 +36,28 @@ const resize = async (uri) => {
 
 const predict = async (base64) => {
   const response = await app.models.predict(
-    { id: "bd367be194cf45149e75f01d59f77ba7" },
-    { base64 }
+    "a403429f2ddf4b49b307e318f00e528b",
+    { base64 },
+    { video: true, sampleMs: 1000 }
   );
   console.log("predict result", response);
   return response;
 };
 
-export default function FoodScreen(props) {
+export default function FaceDetectionScreen(props) {
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
   const [loaded, setLoaded] = useState(true);
 
+  const [recording, setRecording] = useState(false);
+
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const askPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     setHasCameraPermission(status === "granted");
   };
 
   useEffect(() => {
-    Speech.speak("Food screen");
+    Speech.speak("FaceDetection");
     askPermission();
   }, []);
   useEffect(() => {
@@ -63,7 +65,16 @@ export default function FoodScreen(props) {
   }, []);
 
   const capturePhoto = async () => {
-    const photo = await this.camera.takePictureAsync();
+    setRecording(true);
+    const photo = await this.camera.recordAsync(
+      Camera.Constants.VideoQuality["720p"],
+      10,
+      2000,
+      true,
+      false
+    );
+    setRecording(false);
+
     console.log("uri of photo capture", photo.uri);
     return photo.uri;
   };
@@ -75,12 +86,18 @@ export default function FoodScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.concepts);
+    setPredictions(predictions.outputs[0].data.regions);
+    //predictions.outputs[0].data.regions[0].data.face.gender_appearance.concepts
     console.log("predictions");
     console.log(predictions);
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
+  };
+
+  const StopRecord = async () => {
+    const photo = await this.camera.stopRecording();
+    setRecording(false);
   };
 
   return (
@@ -118,6 +135,19 @@ export default function FoodScreen(props) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={StopRecord}
+              style={{
+                flex: 1,
+                alignSelf: "flex-end",
+                alignItems: "center",
+                backgroundColor: recording ? "#ef4f84" : "#4fef97",
+              }}
+            >
+              <Text style={{ textAlign: "center" }}>
+                {recording ? "Stop" : "Record"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
                 flex: 1,
                 alignSelf: "flex-end",
@@ -126,14 +156,17 @@ export default function FoodScreen(props) {
               }}
               onPress={check}
             >
-              {predictions.slice(0, 5).map((prediction) => (
+              {/* {predictions.map((prediction) => (
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
                   {prediction.name}
                   {Speech.speak(prediction.name)}
                 </Text>
-              ))}
+              ))} */}
+              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+                {predictions.length}
+              </Text>
             </TouchableOpacity>
           </View>
         </Camera>
