@@ -38,7 +38,7 @@ const resize = async (uri) => {
 const predict = async (base64) => {
   const response = await app.models.predict(
     "c0c0ac362b03416da06ab3fa36fb58e3",
-    "https://samples.clarifai.com/demographics.jpg"
+    { base64 }
   );
   console.log("predict result", response);
   return response;
