@@ -45,7 +45,7 @@ const predict = async (base64) => {
 };
 
 export default function FaceDetectionScreen(props) {
-  const [predictions, setPredictions] = useState([{ name: "hi" }]);
+  const [predictions, setPredictions] = useState(0);
   const [loaded, setLoaded] = useState(true);
 
   const [recording, setRecording] = useState(false);
@@ -69,7 +69,7 @@ export default function FaceDetectionScreen(props) {
     const photo = await this.camera.recordAsync(
       Camera.Constants.VideoQuality["720p"],
       10,
-      2000,
+      10,
       true,
       false
     );
@@ -84,10 +84,17 @@ export default function FaceDetectionScreen(props) {
 
   const objectDetection = async () => {
     const photo = await capturePhoto();
-    const resized = await resize(photo);
-    const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.regions);
-    //predictions.outputs[0].data.regions[0].data.face.gender_appearance.concepts
+    //const resized = await resize(photo);
+    const predictions = await predict(photo);
+
+    const totalScores = predictions.outputs[0].data.frames.reduce(
+      (previousScore, currentScore, index) =>
+        previousScore + currentScore.data.regions.length,
+      0
+    );
+
+    setPredictions(totalScores);
+    //predictions.outputs[0].data.frames[0].data.regions
     console.log("predictions");
     console.log(predictions);
   };
@@ -165,7 +172,7 @@ export default function FaceDetectionScreen(props) {
                 </Text>
               ))} */}
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {predictions.length}
+                {predictions}
               </Text>
             </TouchableOpacity>
           </View>
