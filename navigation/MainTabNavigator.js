@@ -2,7 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
 
 import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
@@ -13,16 +13,17 @@ import CurrencyScreen from "../screens/CurrencyScreen";
 import StepScreen from "../screens/StepScreen";
 
 import ColorScreen from "../screens/ColorScreen";
+import DemographicsScreen from "../screens/DemographicsScreen";
+import FoodScreen from "../screens/FoodScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
-  default: {}
+  default: {},
 });
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    
   },
   config
 );
@@ -38,14 +39,60 @@ HomeStack.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
 };
 
 HomeStack.path = "";
 
+const DemographicsStack = createStackNavigator(
+  {
+    Demographics: DemographicsScreen,
+  },
+  config
+);
+
+DemographicsStack.navigationOptions = {
+  tabBarLabel: "Demographics",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  ),
+};
+
+DemographicsStack.path = "";
+
+const FoodStack = createStackNavigator(
+  {
+    Food: FoodScreen,
+  },
+  config
+);
+
+FoodStack.navigationOptions = {
+  tabBarLabel: "Food",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  ),
+};
+
+FoodStack.path = "";
+
 const StepStack = createStackNavigator(
   {
-    Step: StepScreen
+    Step: StepScreen,
   },
   config
 );
@@ -60,13 +107,13 @@ StepStack.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
 };
 StepStack.path = "";
 
 const ColorStack = createStackNavigator(
   {
-    Color: ColorScreen
+    Color: ColorScreen,
   },
   config
 );
@@ -81,15 +128,13 @@ ColorStack.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
 };
-ColorStack.path = "";
-
 ColorStack.path = "";
 
 const CurrencyStack = createStackNavigator(
   {
-    Currency: CurrencyScreen
+    Currency: CurrencyScreen,
   },
   config
 );
@@ -105,14 +150,14 @@ CurrencyStack.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
 };
 
 CurrencyStack.path = "";
 
 const LinksStack = createStackNavigator(
   {
-    Links: LinksScreen
+    Links: LinksScreen,
   },
   config
 );
@@ -124,14 +169,14 @@ LinksStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === "ios" ? "ios-link" : "md-link"}
     />
-  )
+  ),
 };
 
 LinksStack.path = "";
 
 const BarCodeStack = createStackNavigator(
   {
-    BarCode: BarCodeScreen
+    BarCode: BarCodeScreen,
   },
   config
 );
@@ -143,17 +188,16 @@ BarCodeStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === "ios" ? "ios-link" : "md-link"}
     />
-  )
+  ),
 };
 
 BarCodeStack.path = "";
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen
+    Settings: SettingsScreen,
   },
   config
-
 );
 
 SettingsStack.navigationOptions = {
@@ -163,7 +207,7 @@ SettingsStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === "ios" ? "ios-options" : "md-options"}
     />
-  )
+  ),
 };
 
 SettingsStack.path = "";
@@ -174,7 +218,9 @@ const tabNavigator = createBottomTabNavigator({
   SettingsStack,
   CurrencyStack,
   StepStack,
-  ColorStack
+  ColorStack,
+  FoodStack,
+  DemographicsStack,
 });
 
 tabNavigator.path = "";

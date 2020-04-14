@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -17,15 +17,16 @@ import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
+import * as Speech from "expo-speech";
 
 import Clarifai from "clarifai";
 
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda"
+  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
 });
 process.nextTick = setImmediate;
 
-const resize = async uri => {
+const resize = async (uri) => {
   let manipulatedImage = await ImageManipulator.manipulateAsync(
     uri,
     [{ resize: { height: 300, width: 300 } }],
@@ -34,7 +35,7 @@ const resize = async uri => {
   return manipulatedImage.base64;
 };
 
-const predict = async base64 => {
+const predict = async (base64) => {
   const response = await app.models.predict(
     { id: "bd367be194cf45149e75f01d59f77ba7" },
     { base64 }
@@ -85,12 +86,12 @@ export default function FoodScreen(props) {
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={payload => setLoaded(true)}
-        onDidBlur={payload => setLoaded(false)}
+        onWillFocus={(payload) => setLoaded(true)}
+        onDidBlur={(payload) => setLoaded(false)}
       />
       {loaded && (
         <Camera
-          ref={ref => {
+          ref={(ref) => {
             this.camera = ref;
           }}
           style={{ flex: 1 }}
@@ -100,7 +101,7 @@ export default function FoodScreen(props) {
             style={{
               flex: 1,
               backgroundColor: "transparent",
-              flexDirection: "row"
+              flexDirection: "row",
             }}
           >
             <TouchableOpacity
@@ -108,7 +109,7 @@ export default function FoodScreen(props) {
                 flex: 1,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "black",
               }}
               onPress={objectDetection}
             >
@@ -121,11 +122,11 @@ export default function FoodScreen(props) {
                 flex: 1,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "black",
               }}
               onPress={check}
             >
-              {predictions.map(prediction => (
+              {predictions.slice(0, 5).map((prediction) => (
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
@@ -144,15 +145,15 @@ async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
       require("../assets/images/robot-dev.png"),
-      require("../assets/images/robot-prod.png")
+      require("../assets/images/robot-prod.png"),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
-    })
+      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+    }),
   ]);
 }
 
@@ -169,6 +170,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });
