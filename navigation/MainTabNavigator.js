@@ -15,6 +15,7 @@ import StepScreen from "../screens/StepScreen";
 import ColorScreen from "../screens/ColorScreen";
 import DemographicsScreen from "../screens/DemographicsScreen";
 import FoodScreen from "../screens/FoodScreen";
+import FaceDetectionScreen from "../screens/FaceDetectionScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -43,6 +44,29 @@ HomeStack.navigationOptions = {
 };
 
 HomeStack.path = "";
+
+const FaceDetectionStack = createStackNavigator(
+  {
+    FaceDetection: FaceDetectionScreen,
+  },
+  config
+);
+
+FaceDetectionStack.navigationOptions = {
+  tabBarLabel: "FaceDetection",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  ),
+};
+
+FaceDetectionStack.path = "";
 
 const DemographicsStack = createStackNavigator(
   {
@@ -221,6 +245,7 @@ const tabNavigator = createBottomTabNavigator({
   ColorStack,
   FoodStack,
   DemographicsStack,
+  FaceDetectionStack,
 });
 
 tabNavigator.path = "";
