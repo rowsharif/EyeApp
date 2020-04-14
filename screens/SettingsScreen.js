@@ -62,14 +62,8 @@ export default function SettingsScreen(props) {
   }, []);
 
   const capturePhoto = async () => {
-    const photo = await this.camera.recordAsync(
-      Camera.Constants.VideoQuality["720p"],
-      10,
-      2000,
-      true,
-      false
-    );
-    console.log("uri of photo capture", photo);
+    const photo = await this.camera.takePictureAsync();
+    console.log("uri of photo capture", photo.uri);
     return photo.uri;
   };
 
