@@ -10,8 +10,10 @@ export default function StepScreen() {
     
 
   const _subscribe = () => {
-            _subscription = Pedometer.watchStepCount(result => {
+            let _subscription = Pedometer.watchStepCount(result => {
                 setcurrentStepCount(result.steps)
+                Speech.speak("Step ".concat(result.steps))
+
             });
             Pedometer.isAvailableAsync().then(
             result => {
@@ -37,23 +39,30 @@ export default function StepScreen() {
   };
 
   const _unsubscribe = () => {
-    _subscription && _subscription.remove();
+    let _subscription=_subscription && _subscription.remove();
     _subscription = null;
   }; 
   useEffect(() => {
-    Speech.speak("Step screen.")
 
             _subscribe();
+            Speech.speak("Step screen.")
+            Speech.speak("Steps taken in the last 24 hours:".concat(currentStepCount))
+
+
   },[])
 
   useEffect(()=> {
+    
         _unsubscribe();
+
   },[])
 
   const Refresh=()=>{
         setcurrentStepCount(0);
         setpastStepCount(0);
         setisPedometerAvailable("checking")
+        Speech.speak("Steps taken in the last 24 hours:".concat(currentStepCount))
+
   }
 
     return (
@@ -64,10 +73,10 @@ export default function StepScreen() {
         </Text>
           <TouchableOpacity
         style={styles.button}
-       
+       disabled={true}
       >
         <Text>Steps you have taken: {currentStepCount}
-        {Speech.speak("Steps you have taken:".concat(currentStepCount.toString()))}
+        {/* {Speech.speak("Steps you have taken:".concat(currentStepCount))} */}
 </Text>
       </TouchableOpacity>       
       <TouchableOpacity
