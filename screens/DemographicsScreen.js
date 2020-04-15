@@ -18,6 +18,7 @@ import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
+import { Audio } from "expo-av";
 console.disableYellowBox = true;
 
 import Clarifai from "clarifai";
@@ -63,7 +64,7 @@ export default function DemographicsScreen(props) {
   };
 
   useEffect(() => {
-    //Speech.speak("Demographics screen");
+    //Speech.speak("Person's Demographics");
     askPermission();
   }, []);
   useEffect(() => {
@@ -82,6 +83,15 @@ export default function DemographicsScreen(props) {
   const objectDetection = async () => {
     const photo = await capturePhoto();
     const resized = await resize(photo);
+    const soundObject = new Audio.Sound();
+
+    try {
+      await soundObject.loadAsync(require("../assets/Sounds/beep1.mp3"));
+      soundObject.replayAsync();
+      // Your sound is playing!
+    } catch (error) {
+      // An error occurred!
+    }
     const predictions = await predict(resized);
     setPredictions(
       predictions.outputs[0].data.regions[0].data.concepts.filter(
@@ -123,7 +133,7 @@ export default function DemographicsScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Person Demographics")}
+          {Speech.speak("Person's Demographics")}
           <View
             style={{
               flex: 1,

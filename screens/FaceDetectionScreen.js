@@ -84,7 +84,7 @@ export default function FaceDetectionScreen(props) {
 
   const objectDetection = async () => {
     const photo = await capturePhoto();
-    //const resized = await resize(photo);
+    const resized = await resize(photo);
     const predictions = await predict(photo);
 
     const totalScores = predictions.outputs[0].data.frames.reduce(

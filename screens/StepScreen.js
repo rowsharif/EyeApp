@@ -47,6 +47,7 @@ export default function StepScreen() {
 
   useEffect(() => {
     _unsubscribe();
+    //Speech.speak("Steps");
   }, []);
 
   const Refresh = () => {

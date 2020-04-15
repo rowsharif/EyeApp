@@ -19,6 +19,7 @@ import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
+import { Audio } from "expo-av";
 
 import Clarifai from "clarifai";
 console.disableYellowBox = true;
@@ -74,6 +75,15 @@ export default function SettingsScreen(props) {
   const objectDetection = async () => {
     const photo = await capturePhoto();
     const resized = await resize(photo);
+    const soundObject = new Audio.Sound();
+
+    try {
+      await soundObject.loadAsync(require("../assets/Sounds/beep1.mp3"));
+      soundObject.replayAsync();
+      // Your sound is playing!
+    } catch (error) {
+      // An error occurred!
+    }
     const predictions = await predict(resized);
     setPredictions(predictions.outputs[0].data.concepts);
     console.log("predictions");
