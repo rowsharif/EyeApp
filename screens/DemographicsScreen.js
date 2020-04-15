@@ -2,14 +2,7 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import React, { useState, useEffect } from "react";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Camera } from "expo-camera";
@@ -170,6 +163,7 @@ export default function DemographicsScreen(props) {
 DemographicsScreen.navigationOptions = {
   header: null,
 };
+
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
