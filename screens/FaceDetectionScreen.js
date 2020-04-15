@@ -18,8 +18,10 @@ import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
-import Clarifai from "clarifai";
+import { Audio } from "expo-av";
 console.disableYellowBox = true;
+
+import Clarifai from "clarifai";
 
 const app = new Clarifai.App({
   apiKey: "e4f6c1b181ea4967a4069da4ce7e2ccb",
@@ -38,27 +40,22 @@ const resize = async (uri) => {
 const predict = async (base64) => {
   const response = await app.models.predict(
     "a403429f2ddf4b49b307e318f00e528b",
-    { base64 },
-    { video: true, sampleMs: 1000 }
+    { base64 }
   );
   console.log("predict result", response);
   return response;
 };
 
 export default function FaceDetectionScreen(props) {
-  const [predictions, setPredictions] = useState(0);
   const [loaded, setLoaded] = useState(true);
-
-  const [recording, setRecording] = useState(false);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const askPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
     setHasCameraPermission(status === "granted");
   };
 
   useEffect(() => {
-    //Speech.speak("FaceDetection");
     askPermission();
   }, []);
   useEffect(() => {
@@ -66,15 +63,7 @@ export default function FaceDetectionScreen(props) {
   }, []);
 
   const capturePhoto = async () => {
-    setRecording(true);
-    const photo = await this.camera.recordAsync(
-      Camera.Constants.VideoQuality["720p"],
-      10,
-      10,
-      true,
-      false
-    );
-    setRecording(false);
+    const photo = await this.camera.takePictureAsync();
     console.log("uri of photo capture", photo.uri);
     return photo.uri;
   };
@@ -85,32 +74,27 @@ export default function FaceDetectionScreen(props) {
   const objectDetection = async () => {
     const photo = await capturePhoto();
     const resized = await resize(photo);
-    const predictions = await predict(photo);
+    const soundObject = new Audio.Sound();
 
-    const totalScores = predictions.outputs[0].data.frames.reduce(
-      (previousScore, currentScore, index) =>
-        previousScore + currentScore.data.regions.length,
-      0
+    try {
+      await soundObject.loadAsync(require("../assets/Sounds/beep1.mp3"));
+      soundObject.replayAsync();
+      // Your sound is playing!
+    } catch (error) {
+      // An error occurred!
+    }
+    const predictions = await predict(resized);
+    Speech.speak(
+      "There is"
+        .concat(predictions.outputs[0].data.regions.length)
+        .concat("Faces in the picture")
     );
 
-    setPredictions(totalScores);
-    //predictions.outputs[0].data.frames[0].data.regions
-    console.log("predictions");
-    console.log(predictions);
+    console.log(
+      "Faces in the picture",
+      predictions.outputs[0].data.regions.length
+    );
   };
-  const check = () => {
-    console.log("sdgvdsfgdsfdbrgs");
-  };
-
-  const StopRecord = async () => {
-    const photo = await this.camera.stopRecording();
-    setRecording(false);
-  };
-  // useEffect(() => {
-  //   return () => {
-  //     Speech.stop();
-  //   };
-  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -118,6 +102,7 @@ export default function FaceDetectionScreen(props) {
         onWillFocus={(payload) => setLoaded(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
+
       {loaded && (
         <Camera
           ref={(ref) => {
@@ -126,7 +111,7 @@ export default function FaceDetectionScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("FaceDetection")}
+          {Speech.speak("Face Detection")}
           <View
             style={{
               flex: 1,
@@ -136,49 +121,22 @@ export default function FaceDetectionScreen(props) {
           >
             <TouchableOpacity
               style={{
-                flex: 1,
+                flex: 2,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black",
+                backgroundColor: "#33344a",
               }}
               onPress={objectDetection}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 40,
+                  marginTop: 25,
+                  color: "white",
+                }}
+              >
                 Capture Image
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={StopRecord}
-              style={{
-                flex: 1,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                backgroundColor: recording ? "#ef4f84" : "#4fef97",
-              }}
-            >
-              <Text style={{ textAlign: "center" }}>
-                {recording ? "Stop" : "Record"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                backgroundColor: "black",
-              }}
-              onPress={check}
-            >
-              {/* {predictions.map((prediction) => (
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: "white" }}
-                >
-                  {prediction.name}
-                  {Speech.speak(prediction.name)}
-                </Text>
-              ))} */}
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {predictions}
               </Text>
             </TouchableOpacity>
           </View>

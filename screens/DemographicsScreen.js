@@ -133,7 +133,7 @@ export default function DemographicsScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Person's Demographics")}
+          {Speech.speak("Person Demographics")}
           <View
             style={{
               flex: 1,
