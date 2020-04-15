@@ -23,7 +23,7 @@ console.disableYellowBox = true;
 import Clarifai from "clarifai";
 
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
+  apiKey: "e4f6c1b181ea4967a4069da4ce7e2ccb",
 });
 process.nextTick = setImmediate;
 
@@ -83,15 +83,21 @@ export default function DemographicsScreen(props) {
     const photo = await capturePhoto();
     const resized = await resize(photo);
     const predictions = await predict(resized);
-    setPredictions(predictions.outputs[0].data.regions);
+    setPredictions(
+      predictions.outputs[0].data.regions[0].data.concepts.filter(
+        (x) => x.vocab_id === "multicultural_appearance"
+      )
+    );
     // predictions.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts
     console.log("predictions");
     console.log(predictions);
-    const arr =
-      predictions.outputs[0].data.regions[0].data.face.multicultural_appearance
-        .concepts[0];
+    const arr = predictions.outputs[0].data.regions[0].data.concepts.filter(
+      (x) => x.vocab_id === "multicultural_appearance"
+    );
 
-    Speech.speak(arr.name);
+    arr.slice(0, 2).map((prediction) => {
+      prediction.name !== "hi" && Speech.speak(prediction.name);
+    });
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
@@ -117,7 +123,7 @@ export default function DemographicsScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Demographics screen")}
+          {Speech.speak("Person Demographics")}
           <View
             style={{
               flex: 1,
@@ -145,34 +151,6 @@ export default function DemographicsScreen(props) {
                 Capture Image
               </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={{
-                flex: 1,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                backgroundColor: "black",
-              }}
-              onPress={check}
-            >
-              {/* {predictions.map((prediction) => (
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: "white" }}
-                >
-                  {
-                    prediction.data.face.multicultural_appearance.concepts[0]
-                      .name
-                  }
-                  {/* {Speech.speak(prediction.name)}
-                </Text>
-              ))} 
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                {
-                  predictions[0].data.face.multicultural_appearance.concepts[0]
-                    .name
-                }
-                {/* {Speech.speak(prediction.name)} 
-              </Text>
-            </TouchableOpacity> */}
           </View>
         </Camera>
       )}

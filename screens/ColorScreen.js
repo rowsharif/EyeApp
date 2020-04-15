@@ -24,7 +24,7 @@ import Clarifai from "clarifai";
 console.disableYellowBox = true;
 
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
+  apiKey: "e4f6c1b181ea4967a4069da4ce7e2ccb",
 });
 process.nextTick = setImmediate;
 

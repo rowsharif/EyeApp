@@ -27,12 +27,12 @@ export default function BarCodeScreen() {
     setScanned(true);
     //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     const response = await fetch(
-      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=kwm395rj9cfv7hxnvszaoal4mh08mj`
+      `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=jsojcjrwego49jdx4utapb5g2np48r`
     );
     const json = await response.json();
-    Speech.speak(json.products[0].product_name);
+    Speech.speak("for the product".concat(json.products[0].product_name));
     console.log("json", json);
-    alert(`Product is ${json.products[0].product_name}`);
+    //alert(`Product is ${json.products[0].product_name}`);
     // alert(`Product is ${json.products[0].product_name}
     // description is ${json.products[0].description}
     // color is ${json.products[0].color}`);

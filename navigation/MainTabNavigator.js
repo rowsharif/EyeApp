@@ -13,6 +13,7 @@ import {
   MaterialIcons,
   Foundation,
   Feather,
+  Fontisto,
 } from "@expo/vector-icons";
 
 import TabBarIcon from "../components/TabBarIcon";
@@ -55,7 +56,7 @@ const DemographicsStack = createStackNavigator(
 
 DemographicsStack.navigationOptions = {
   tabBarLabel: ({ focused, tintColor: color }) => (
-    <Fontisto name="earth" size={20} color={color} />
+    <MaterialCommunityIcons name="earth" size={20} color={color} />
   ),
 };
 
@@ -154,7 +155,7 @@ const tabNavigator = createMaterialTopTabNavigator(
     StepStack,
     ColorStack,
     FoodStack,
-    //DemographicsStack,
+    DemographicsStack,
     FaceDetectionStack,
   },
   {

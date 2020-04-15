@@ -22,7 +22,7 @@ import * as Speech from "expo-speech";
 import Clarifai from "clarifai";
 console.disableYellowBox = true;
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
+  apiKey: "14ed2164e0c04fb3946ea51b5748aa53",
 });
 process.nextTick = setImmediate;
 
