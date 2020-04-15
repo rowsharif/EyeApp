@@ -10,7 +10,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationEvents } from "react-navigation";
@@ -21,13 +21,14 @@ import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import Clarifai from "clarifai";
+console.disableYellowBox = true;
 
 const app = new Clarifai.App({
-  apiKey: "14ed2164e0c04fb3946ea51b5748aa53"
+  apiKey: "14ed2164e0c04fb3946ea51b5748aa53",
 });
 process.nextTick = setImmediate;
 
-const resize = async uri => {
+const resize = async (uri) => {
   let manipulatedImage = await ImageManipulator.manipulateAsync(
     uri,
     [{ resize: { height: 300, width: 300 } }],
@@ -36,7 +37,7 @@ const resize = async uri => {
   return manipulatedImage.base64;
 };
 
-const predict = async base64 => {
+const predict = async (base64) => {
   const response = await app.models.predict(Clarifai.GENERAL_MODEL, { base64 });
   console.log("predict result", response);
   return response;
@@ -53,7 +54,7 @@ export default function SettingsScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Surrounding screen");
+    //Speech.speak("Surrounding screen");
 
     askPermission();
   }, []);
@@ -77,82 +78,102 @@ export default function SettingsScreen(props) {
     setPredictions(predictions.outputs[0].data.concepts);
     console.log("predictions");
     console.log(predictions);
+    const arr = predictions.outputs[0].data.concepts;
+    arr.slice(0, 5).map((prediction) => {
+      prediction.name !== "hi" && Speech.speak(prediction.name);
+    });
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
   };
+  // useEffect(() => {
+  //   return () => {
+  //     Speech.stop();
+  //   };
+  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={payload => setLoaded(true)}
-        onDidBlur={payload => setLoaded(false)}
+        onWillFocus={(payload) => setLoaded(true)}
+        onDidBlur={(payload) => setLoaded(false)}
       />
       {loaded && (
         <Camera
-          ref={ref => {
+          ref={(ref) => {
             this.camera = ref;
           }}
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
+          {Speech.speak("Surroundings")}
           <View
             style={{
               flex: 1,
               backgroundColor: "transparent",
-              flexDirection: "row"
+              flexDirection: "row",
             }}
           >
             <TouchableOpacity
               style={{
-                flex: 1,
+                flex: 2,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "#33344a",
               }}
               onPress={objectDetection}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 40,
+                  marginTop: 25,
+                  color: "white",
+                }}
+              >
                 Capture Image
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 flex: 1,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "black",
               }}
               onPress={check}
             >
-              {predictions.map(prediction => (
+              {predictions.slice(0, 5).map((prediction) => (
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
                   {prediction.name}
-                  {Speech.speak(prediction.name)}
+                  {prediction.name !== "hi" && Speech.speak(prediction.name)}
                 </Text>
               ))}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Camera>
       )}
     </View>
   );
 }
+SettingsScreen.navigationOptions = {
+  header: null,
+};
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
       require("../assets/images/robot-dev.png"),
-      require("../assets/images/robot-prod.png")
+      require("../assets/images/robot-prod.png"),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
-    })
+      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+    }),
   ]);
 }
 
@@ -169,6 +190,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });

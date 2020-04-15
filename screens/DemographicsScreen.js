@@ -18,6 +18,7 @@ import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
+console.disableYellowBox = true;
 
 import Clarifai from "clarifai";
 
@@ -62,7 +63,7 @@ export default function DemographicsScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Demographics screen");
+    //Speech.speak("Demographics screen");
     askPermission();
   }, []);
   useEffect(() => {
@@ -86,10 +87,20 @@ export default function DemographicsScreen(props) {
     // predictions.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts
     console.log("predictions");
     console.log(predictions);
+    const arr =
+      predictions.outputs[0].data.regions[0].data.face.multicultural_appearance
+        .concepts[0];
+
+    Speech.speak(arr.name);
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
   };
+  // useEffect(() => {
+  //   return () => {
+  //     Speech.stop();
+  //   };
+  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -97,6 +108,7 @@ export default function DemographicsScreen(props) {
         onWillFocus={(payload) => setLoaded(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
+
       {loaded && (
         <Camera
           ref={(ref) => {
@@ -105,6 +117,7 @@ export default function DemographicsScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
+          {Speech.speak("Demographics screen")}
           <View
             style={{
               flex: 1,
@@ -114,18 +127,25 @@ export default function DemographicsScreen(props) {
           >
             <TouchableOpacity
               style={{
-                flex: 1,
+                flex: 2,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black",
+                backgroundColor: "#33344a",
               }}
               onPress={objectDetection}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 40,
+                  marginTop: 25,
+                  color: "white",
+                }}
+              >
                 Capture Image
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 flex: 1,
                 alignSelf: "flex-end",
@@ -144,21 +164,24 @@ export default function DemographicsScreen(props) {
                   }
                   {/* {Speech.speak(prediction.name)}
                 </Text>
-              ))} */}
+              ))} 
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {
                   predictions[0].data.face.multicultural_appearance.concepts[0]
                     .name
                 }
-                {/* {Speech.speak(prediction.name)} */}
+                {/* {Speech.speak(prediction.name)} 
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Camera>
       )}
     </View>
   );
 }
+DemographicsScreen.navigationOptions = {
+  header: null,
+};
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([

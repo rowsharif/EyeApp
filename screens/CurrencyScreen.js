@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -17,16 +17,17 @@ import * as FaceDetector from "expo-face-detector";
 import * as Permissions from "expo-permissions";
 import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
 
 import Clarifai from "clarifai";
+console.disableYellowBox = true;
 
 const app = new Clarifai.App({
-  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda"
+  apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
 });
 process.nextTick = setImmediate;
 
-const resize = async uri => {
+const resize = async (uri) => {
   let manipulatedImage = await ImageManipulator.manipulateAsync(
     uri,
     [{ resize: { height: 300, width: 300 } }],
@@ -35,7 +36,7 @@ const resize = async uri => {
   return manipulatedImage.base64;
 };
 
-const predict = async base64 => {
+const predict = async (base64) => {
   const response = await app.models.predict(
     { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
     { base64 }
@@ -55,7 +56,7 @@ export default function CurrencyScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Currency screen")
+    //Speech.speak("Currency screen");
 
     askPermission();
   }, []);
@@ -77,81 +78,100 @@ export default function CurrencyScreen(props) {
     const resized = await resize(photo);
     const predictions = await predict(resized);
     setPredictions(predictions.outputs[0].data.concepts);
-    
+
     console.log("predictions");
     console.log(predictions);
+    const arr = predictions.outputs[0].data.concepts;
+    Speech.speak("This is ".concat(arr[0].name));
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
   };
-
+  // useEffect(() => {
+  //   return () => {
+  //     Speech.stop();
+  //   };
+  // }, []);
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={payload => setLoaded(true)}
-        onDidBlur={payload => setLoaded(false)}
+        onWillFocus={(payload) => setLoaded(true)}
+        onDidBlur={(payload) => setLoaded(false)}
       />
+
       {loaded && (
         <Camera
-          ref={ref => {
+          ref={(ref) => {
             this.camera = ref;
           }}
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
+          {Speech.speak("Currency")}
           <View
             style={{
               flex: 1,
               backgroundColor: "transparent",
-              flexDirection: "row"
+              flexDirection: "row",
             }}
           >
             <TouchableOpacity
               style={{
-                flex: 1,
+                flex: 2,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "#33344a",
               }}
               onPress={objectDetection}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 40,
+                  marginTop: 25,
+                  color: "white",
+                }}
+              >
                 Capture Image
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 flex: 1,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black"
+                backgroundColor: "black",
               }}
               onPress={check}
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
                 {predictions[0].name}
-                {Speech.speak("This is ".concat(predictions[0].name))}
+                {predictions[0].name !== "hi" &&
+                  Speech.speak("This is ".concat(predictions[0].name))}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Camera>
       )}
     </View>
   );
 }
+CurrencyScreen.navigationOptions = {
+  header: null,
+};
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
       require("../assets/images/robot-dev.png"),
-      require("../assets/images/robot-prod.png")
+      require("../assets/images/robot-prod.png"),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
-    })
+      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+    }),
   ]);
 }
 
@@ -168,6 +188,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });

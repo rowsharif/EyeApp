@@ -20,7 +20,7 @@ import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
 
 import Clarifai from "clarifai";
-
+console.disableYellowBox = true;
 const app = new Clarifai.App({
   apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
 });
@@ -55,7 +55,7 @@ export default function FoodScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("Food screen");
+    //Speech.speak("Food screen");
     askPermission();
   }, []);
   useEffect(() => {
@@ -67,6 +67,11 @@ export default function FoodScreen(props) {
     console.log("uri of photo capture", photo.uri);
     return photo.uri;
   };
+  // useEffect(() => {
+  //   return () => {
+  //     Speech.stop();
+  //   };
+  // }, []);
 
   //method call when Capture Image button pressed
   //set the state for predictions get
@@ -78,6 +83,10 @@ export default function FoodScreen(props) {
     setPredictions(predictions.outputs[0].data.concepts);
     console.log("predictions");
     console.log(predictions);
+    const arr = predictions.outputs[0].data.concepts;
+    arr.slice(0, 5).map((prediction) => {
+      prediction.name !== "hi" && Speech.speak(prediction.name);
+    });
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
@@ -97,6 +106,7 @@ export default function FoodScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
+          {Speech.speak("Food")}
           <View
             style={{
               flex: 1,
@@ -106,18 +116,25 @@ export default function FoodScreen(props) {
           >
             <TouchableOpacity
               style={{
-                flex: 1,
+                flex: 2,
                 alignSelf: "flex-end",
                 alignItems: "center",
-                backgroundColor: "black",
+                backgroundColor: "#33344a",
               }}
               onPress={objectDetection}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 40,
+                  marginTop: 25,
+                  color: "white",
+                }}
+              >
                 Capture Image
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 flex: 1,
                 alignSelf: "flex-end",
@@ -131,16 +148,19 @@ export default function FoodScreen(props) {
                   style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                 >
                   {prediction.name}
-                  {Speech.speak(prediction.name)}
+                  {prediction.name !== "hi" && Speech.speak(prediction.name)}
                 </Text>
               ))}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Camera>
       )}
     </View>
   );
 }
+FoodScreen.navigationOptions = {
+  header: null,
+};
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([

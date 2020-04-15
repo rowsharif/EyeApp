@@ -19,6 +19,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 import { NavigationEvents } from "react-navigation";
 import * as Speech from "expo-speech";
 import Clarifai from "clarifai";
+console.disableYellowBox = true;
 
 const app = new Clarifai.App({
   apiKey: "e02c1b3436ca4a699442e0fdb7c77dda",
@@ -57,7 +58,7 @@ export default function FaceDetectionScreen(props) {
   };
 
   useEffect(() => {
-    Speech.speak("FaceDetection");
+    //Speech.speak("FaceDetection");
     askPermission();
   }, []);
   useEffect(() => {
@@ -106,6 +107,11 @@ export default function FaceDetectionScreen(props) {
     const photo = await this.camera.stopRecording();
     setRecording(false);
   };
+  // useEffect(() => {
+  //   return () => {
+  //     Speech.stop();
+  //   };
+  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -121,6 +127,7 @@ export default function FaceDetectionScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
+          {Speech.speak("FaceDetection")}
           <View
             style={{
               flex: 1,
@@ -181,6 +188,9 @@ export default function FaceDetectionScreen(props) {
     </View>
   );
 }
+FaceDetectionScreen.navigationOptions = {
+  header: null,
+};
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([

@@ -1,12 +1,21 @@
 import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import {
+  createBottomTabNavigator,
+  createMaterialTopTabNavigator,
+} from "react-navigation-tabs";
 import * as Speech from "expo-speech";
+import {
+  MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome,
+  MaterialIcons,
+  Foundation,
+  Feather,
+} from "@expo/vector-icons";
 
 import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
 import BarCodeScreen from "../screens/BarCodeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CurrencyScreen from "../screens/CurrencyScreen";
@@ -22,29 +31,6 @@ const config = Platform.select({
   default: {},
 });
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
-);
-
-HomeStack.navigationOptions = {
-  tabBarLabel: "Home",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
-  ),
-};
-
-HomeStack.path = "";
-
 const FaceDetectionStack = createStackNavigator(
   {
     FaceDetection: FaceDetectionScreen,
@@ -53,16 +39,8 @@ const FaceDetectionStack = createStackNavigator(
 );
 
 FaceDetectionStack.navigationOptions = {
-  tabBarLabel: "FaceDetection",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <MaterialCommunityIcons name="face-recognition" size={20} color={color} />
   ),
 };
 
@@ -76,16 +54,8 @@ const DemographicsStack = createStackNavigator(
 );
 
 DemographicsStack.navigationOptions = {
-  tabBarLabel: "Demographics",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <Fontisto name="earth" size={20} color={color} />
   ),
 };
 
@@ -99,16 +69,8 @@ const FoodStack = createStackNavigator(
 );
 
 FoodStack.navigationOptions = {
-  tabBarLabel: "Food",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <MaterialCommunityIcons name="food" size={20} color={color} />
   ),
 };
 
@@ -121,16 +83,8 @@ const StepStack = createStackNavigator(
   config
 );
 StepStack.navigationOptions = {
-  tabBarLabel: "Steps",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <Foundation name="foot" size={20} color={color} />
   ),
 };
 StepStack.path = "";
@@ -142,16 +96,8 @@ const ColorStack = createStackNavigator(
   config
 );
 ColorStack.navigationOptions = {
-  tabBarLabel: "Color",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <Ionicons name="md-color-palette" size={20} color={color} />
   ),
 };
 ColorStack.path = "";
@@ -164,39 +110,12 @@ const CurrencyStack = createStackNavigator(
 );
 
 CurrencyStack.navigationOptions = {
-  tabBarLabel: "Currency",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <MaterialCommunityIcons name="currency-usd" size={20} color={color} />
   ),
 };
 
 CurrencyStack.path = "";
-
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
-  },
-  config
-);
-
-LinksStack.navigationOptions = {
-  tabBarLabel: "Links",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
-  ),
-};
-
-LinksStack.path = "";
 
 const BarCodeStack = createStackNavigator(
   {
@@ -206,12 +125,8 @@ const BarCodeStack = createStackNavigator(
 );
 
 BarCodeStack.navigationOptions = {
-  tabBarLabel: "BarCode",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <MaterialCommunityIcons name="barcode-scan" size={20} color={color} />
   ),
 };
 
@@ -225,28 +140,59 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: "Surroundings",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
+  tabBarLabel: ({ focused, tintColor: color }) => (
+    <MaterialCommunityIcons name="home-assistant" size={20} color={color} />
   ),
 };
 
 SettingsStack.path = "";
-
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  BarCodeStack,
-  SettingsStack,
-  CurrencyStack,
-  StepStack,
-  ColorStack,
-  FoodStack,
-  DemographicsStack,
-  FaceDetectionStack,
-});
+const tabNavigator = createMaterialTopTabNavigator(
+  {
+    BarCodeStack,
+    SettingsStack,
+    CurrencyStack,
+    StepStack,
+    ColorStack,
+    FoodStack,
+    //DemographicsStack,
+    FaceDetectionStack,
+  },
+  {
+    lazy: true,
+    tabBarPosition: "top",
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: "yellow",
+      style: {
+        backgroundColor: "#33344a",
+        paddingTop: 30,
+      },
+    },
+  },
+  {
+    //tabBarPosition: "top",
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: "green",
+      inactiveTintColor: "#F8F8F8",
+      style: {
+        backgroundColor: "#0d1491",
+        paddingTop: 20,
+      },
+      //lablePosition:"beside-icon",
+      lableStyle: {
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "bold",
+      },
+      indicatorStyle: {
+        borderBottomColor: "#eee",
+        borderBottomWidth: 70,
+      },
+    },
+  }
+);
 
 tabNavigator.path = "";
 
