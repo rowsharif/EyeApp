@@ -75,7 +75,6 @@ export default function FaceDetectionScreen(props) {
       false
     );
     setRecording(false);
-
     console.log("uri of photo capture", photo.uri);
     return photo.uri;
   };
