@@ -29,25 +29,24 @@ const app = new Clarifai.App({
 });
 process.nextTick = setImmediate;
 
-const resize = async (uri) => {
-  let manipulatedImage = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { height: 300, width: 300 } }],
-    { base64: true }
-  );
-  return manipulatedImage.base64;
-};
-
-const predict = async (base64) => {
-  const response = await app.models.predict(
-    "eeed0b6733a644cea07cf4c60f87ebb7",
-    { base64 }
-  );
-  console.log("predict result", response);
-  return response;
-};
-
 export default function ColorScreen(props) {
+  const resize = async (uri) => {
+    let manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { height: 300, width: 300 } }],
+      { base64: true }
+    );
+    return manipulatedImage.base64;
+  };
+
+  const predict = async (base64) => {
+    const response = await app.models.predict(
+      "eeed0b6733a644cea07cf4c60f87ebb7",
+      { base64 }
+    );
+    console.log("predict result", response);
+    return response;
+  };
   const [predictions, setPredictions] = useState([{ w3c: { name: "hi" } }]);
   const [loaded, setLoaded] = useState(true);
 
@@ -91,23 +90,20 @@ export default function ColorScreen(props) {
     // console.log("predictions");
     // console.log(predictions);
     const arr = predictions.outputs[0].data.colors;
+    Speech.speak("Colors in sight are: ");
     arr.slice(0, 5).map((prediction) => {
       prediction.w3c.name !== "hi" && Speech.speak(prediction.w3c.name);
     });
   };
-  const check = () => {
-    console.log("sdgvdsfgdsfdbrgs");
-  };
-  // useEffect(() => {
-  //   return () => {
-  //     Speech.stop();
-  //   };
-  // }, []);
 
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Colors");
+  };
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
 
@@ -119,7 +115,7 @@ export default function ColorScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Colors")}
+          {/* {Speech.speak("Colors")} */}
           <View
             style={{
               flex: 1,

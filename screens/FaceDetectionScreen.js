@@ -28,25 +28,24 @@ const app = new Clarifai.App({
 });
 process.nextTick = setImmediate;
 
-const resize = async (uri) => {
-  let manipulatedImage = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { height: 300, width: 300 } }],
-    { base64: true }
-  );
-  return manipulatedImage.base64;
-};
-
-const predict = async (base64) => {
-  const response = await app.models.predict(
-    "a403429f2ddf4b49b307e318f00e528b",
-    { base64 }
-  );
-  console.log("predict result", response);
-  return response;
-};
-
 export default function FaceDetectionScreen(props) {
+  const resize = async (uri) => {
+    let manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { height: 300, width: 300 } }],
+      { base64: true }
+    );
+    return manipulatedImage.base64;
+  };
+
+  const predict = async (base64) => {
+    const response = await app.models.predict(
+      "a403429f2ddf4b49b307e318f00e528b",
+      { base64 }
+    );
+    console.log("predict result", response);
+    return response;
+  };
   const [loaded, setLoaded] = useState(true);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -95,11 +94,15 @@ export default function FaceDetectionScreen(props) {
       predictions.outputs[0].data.regions.length
     );
   };
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Face Detection");
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
 
@@ -111,7 +114,7 @@ export default function FaceDetectionScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Face Detection")}
+          {/* {Speech.speak("Face Detection")} */}
           <View
             style={{
               flex: 1,

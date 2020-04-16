@@ -30,7 +30,7 @@ export default function BarCodeScreen() {
       `https://api.barcodelookup.com/v2/products?barcode=${data}&formatted=y&key=jsojcjrwego49jdx4utapb5g2np48r`
     );
     const json = await response.json();
-    Speech.speak("for the product".concat(json.products[0].product_name));
+    Speech.speak("The product is: ".concat(json.products[0].product_name));
     console.log("json", json);
     //alert(`Product is ${json.products[0].product_name}`);
     // alert(`Product is ${json.products[0].product_name}
@@ -45,11 +45,15 @@ export default function BarCodeScreen() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("BarCode");
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
       {loaded && (
@@ -60,7 +64,6 @@ export default function BarCodeScreen() {
             flexDirection: "row",
           }}
         >
-          {Speech.speak("BarCode")}
           <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
             style={StyleSheet.absoluteFillObject}

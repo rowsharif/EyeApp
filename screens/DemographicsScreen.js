@@ -28,25 +28,24 @@ const app = new Clarifai.App({
 });
 process.nextTick = setImmediate;
 
-const resize = async (uri) => {
-  let manipulatedImage = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { height: 300, width: 300 } }],
-    { base64: true }
-  );
-  return manipulatedImage.base64;
-};
-
-const predict = async (base64) => {
-  const response = await app.models.predict(
-    "c0c0ac362b03416da06ab3fa36fb58e3",
-    { base64 }
-  );
-  console.log("predict result", response);
-  return response;
-};
-
 export default function DemographicsScreen(props) {
+  const resize = async (uri) => {
+    let manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { height: 300, width: 300 } }],
+      { base64: true }
+    );
+    return manipulatedImage.base64;
+  };
+
+  const predict = async (base64) => {
+    const response = await app.models.predict(
+      "c0c0ac362b03416da06ab3fa36fb58e3",
+      { base64 }
+    );
+    console.log("predict result", response);
+    return response;
+  };
   //.data.face.multicultural_appearance.concepts
   const [predictions, setPredictions] = useState([
     {
@@ -104,10 +103,19 @@ export default function DemographicsScreen(props) {
     const arr = predictions.outputs[0].data.regions[0].data.concepts.filter(
       (x) => x.vocab_id === "multicultural_appearance"
     );
+    const arr1 = predictions.outputs[0].data.regions[0].data.concepts.filter(
+      (x) => x.vocab_id === "gender_appearance"
+    );
+    const arr2 = predictions.outputs[0].data.regions[0].data.concepts.filter(
+      (x) => x.vocab_id === "age_appearance"
+    );
 
-    arr.slice(0, 2).map((prediction) => {
-      prediction.name !== "hi" && Speech.speak(prediction.name);
-    });
+    Speech.speak("looks like a ".concat(arr2[0].name));
+    Speech.speak(arr1[0].name);
+    Speech.speak(arr[0].name);
+    // arr.slice(0, 2).map((prediction) => {
+    //   prediction.name !== "hi" && Speech.speak(prediction.name);
+    // });
   };
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
@@ -117,11 +125,14 @@ export default function DemographicsScreen(props) {
   //     Speech.stop();
   //   };
   // }, []);
-
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Person Demographics");
+  };
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
 
@@ -133,7 +144,7 @@ export default function DemographicsScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Person Demographics")}
+          {/* {Speech.speak("Person Demographics")} */}
           <View
             style={{
               flex: 1,

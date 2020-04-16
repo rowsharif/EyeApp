@@ -57,13 +57,17 @@ export default function StepScreen() {
     //Speech.speak("Steps taken in the last 24 hours:".concat(currentStepCount));
   };
   const [loaded, setLoaded] = useState(true);
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Steps");
+  };
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
-      {loaded && Speech.speak("Steps")}
+      {/* {Speech.speak("Steps")} */}
       <View
         style={{
           flex: 1,

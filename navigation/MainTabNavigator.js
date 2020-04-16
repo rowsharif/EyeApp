@@ -149,14 +149,14 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = "";
 const tabNavigator = createMaterialTopTabNavigator(
   {
-    BarCodeStack,
     SettingsStack,
     CurrencyStack,
-    StepStack,
-    ColorStack,
+    BarCodeStack,
     FoodStack,
-    DemographicsStack,
     FaceDetectionStack,
+    ColorStack,
+    StepStack,
+    DemographicsStack,
   },
   {
     lazy: true,

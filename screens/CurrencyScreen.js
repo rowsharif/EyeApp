@@ -28,25 +28,24 @@ const app = new Clarifai.App({
 });
 process.nextTick = setImmediate;
 
-const resize = async (uri) => {
-  let manipulatedImage = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { height: 300, width: 300 } }],
-    { base64: true }
-  );
-  return manipulatedImage.base64;
-};
-
-const predict = async (base64) => {
-  const response = await app.models.predict(
-    { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
-    { base64 }
-  );
-  console.log("predict result", response);
-  return response;
-};
-
 export default function CurrencyScreen(props) {
+  const resize = async (uri) => {
+    let manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { height: 300, width: 300 } }],
+      { base64: true }
+    );
+    return manipulatedImage.base64;
+  };
+
+  const predict = async (base64) => {
+    const response = await app.models.predict(
+      { id: "qatari riyal", version: "aedd2bca17ba4409814ce44504a4f98a" },
+      { base64 }
+    );
+    console.log("predict result", response);
+    return response;
+  };
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
   const [loaded, setLoaded] = useState(true);
 
@@ -102,10 +101,15 @@ export default function CurrencyScreen(props) {
   //     Speech.stop();
   //   };
   // }, []);
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Currency");
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
 
@@ -117,7 +121,7 @@ export default function CurrencyScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Currency")}
+          {/* {Speech.speak("Currency")} */}
           <View
             style={{
               flex: 1,

@@ -27,25 +27,24 @@ const app = new Clarifai.App({
 });
 process.nextTick = setImmediate;
 
-const resize = async (uri) => {
-  let manipulatedImage = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { height: 300, width: 300 } }],
-    { base64: true }
-  );
-  return manipulatedImage.base64;
-};
-
-const predict = async (base64) => {
-  const response = await app.models.predict(
-    { id: "bd367be194cf45149e75f01d59f77ba7" },
-    { base64 }
-  );
-  console.log("predict result", response);
-  return response;
-};
-
 export default function FoodScreen(props) {
+  const resize = async (uri) => {
+    let manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { height: 300, width: 300 } }],
+      { base64: true }
+    );
+    return manipulatedImage.base64;
+  };
+
+  const predict = async (base64) => {
+    const response = await app.models.predict(
+      { id: "bd367be194cf45149e75f01d59f77ba7" },
+      { base64 }
+    );
+    console.log("predict result", response);
+    return response;
+  };
   const [predictions, setPredictions] = useState([{ name: "hi" }]);
   const [loaded, setLoaded] = useState(true);
 
@@ -94,6 +93,7 @@ export default function FoodScreen(props) {
     console.log("predictions");
     console.log(predictions);
     const arr = predictions.outputs[0].data.concepts;
+    Speech.speak("The food probably contain: ");
     arr.slice(0, 5).map((prediction) => {
       prediction.name !== "hi" && Speech.speak(prediction.name);
     });
@@ -101,11 +101,15 @@ export default function FoodScreen(props) {
   const check = () => {
     console.log("sdgvdsfgdsfdbrgs");
   };
+  const setLoaded2 = () => {
+    setLoaded(true);
+    Speech.speak("Food");
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationEvents
-        onWillFocus={(payload) => setLoaded(true)}
+        onWillFocus={(payload) => setLoaded2(true)}
         onDidBlur={(payload) => setLoaded(false)}
       />
       {loaded && (
@@ -116,7 +120,7 @@ export default function FoodScreen(props) {
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
         >
-          {Speech.speak("Food")}
+          {/* {Speech.speak("Food")} */}
           <View
             style={{
               flex: 1,
