@@ -91,7 +91,8 @@ export default function ColorScreen(props) {
     // console.log(predictions);
     const arr = predictions.outputs[0].data.colors;
     Speech.speak("Colors in sight are: ");
-    arr.slice(0, 5).map((prediction) => {
+    const num = arr.length > 5 ? 5 : arr.length;
+    arr.slice(0, num).map((prediction) => {
       prediction.w3c.name !== "hi" && Speech.speak(prediction.w3c.name);
     });
   };
@@ -114,6 +115,7 @@ export default function ColorScreen(props) {
           }}
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
+          flashMode="on"
         >
           {/* {Speech.speak("Colors")} */}
           <View

@@ -94,7 +94,8 @@ export default function FoodScreen(props) {
     console.log(predictions);
     const arr = predictions.outputs[0].data.concepts;
     Speech.speak("The food probably contain: ");
-    arr.slice(0, 5).map((prediction) => {
+    const num = arr.length > 5 ? 5 : arr.length;
+    arr.slice(0, num).map((prediction) => {
       prediction.name !== "hi" && Speech.speak(prediction.name);
     });
   };

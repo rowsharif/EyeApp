@@ -78,7 +78,7 @@ export default function StepScreen() {
         <TouchableOpacity
           style={{
             flex: 2,
-            alignSelf: "flex-end",
+            alignSelf: "flex-start",
             alignItems: "center",
             backgroundColor: "#33344a",
           }}
@@ -129,34 +129,6 @@ export default function StepScreen() {
           >
             Steps you have taken: {currentStepCount}
             {/* {Speech.speak("Steps you have taken:".concat(currentStepCount))} */}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "transparent",
-          flexDirection: "row",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            flex: 2,
-            alignSelf: "flex-end",
-            alignItems: "center",
-            backgroundColor: "#33344a",
-          }}
-          onPress={Refresh}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              marginBottom: 40,
-              marginTop: 25,
-              color: "white",
-            }}
-          >
-            Refresh
           </Text>
         </TouchableOpacity>
       </View>
