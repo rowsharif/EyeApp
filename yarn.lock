@@ -2677,10 +2677,6 @@ expo-asset@^8.0.0, expo-asset@~8.0.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
-expo-av@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-8.1.0.tgz#376e2a821168cd83e997c6dd84350fab6b293f10"
-  integrity sha512-owWxOCyK+dPyT3pF4rDOf2W8Sn8LSEvfw1HvU9xM0wzH7xF0bw3Zs3wcXxvtfhnXAZ5dCDQfvZI5cXk+lml+IQ==
 expo-av@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-8.0.0.tgz#fc892a0e4ff7e1eff630002e0652da3125d18113"
@@ -6474,10 +6470,10 @@ three@^0.102.1:
   resolved "https://registry.yarnpkg.com/three/-/three-0.102.1.tgz#fc08b6b11860cf59e8cd45b7e90e34d1d1a8cbd6"
   integrity sha512-btHBdww/Es4vdBkB2GjTE9mpj0vy8tgtxkX7ne7uxySXV8zoGxWJv1N88BydxnCqvAfmD4ZUTqPeESO7oDgeOQ==
 
-three@^0.113.2:
-  version "0.113.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.113.2.tgz#04791d491fe4359330f9dbe7b767db18bfb35d67"
-  integrity sha512-x3vrKW41/UtbWbWduWKGlfIc043SvHWr3YltehYq+UGb9YglQ2oztNGvl2eut05JtNSmP11Mh3t6Xak5/0e+Fg==
+three@^0.125.0:
+  version "0.125.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.125.0.tgz#19e922b9dc51ad0b706893aeee888de68e99850a"
+  integrity sha512-qL36qUGsPQ/Ofo/RZdXwHwM7A8wzUSAIyawtjIebJSPvounUQeneSqxI0aBY2iwKpseGy+RUtj3C5f/z4poyXw==
 
 throat@^4.0.0, throat@^4.1.0:
   version "4.1.0"
